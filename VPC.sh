@@ -15,8 +15,8 @@ awsResponse=$(aws ec2 create-vpc \
             --region "$REGION" \
             --output json)
 
-# getting vpc_id
-vpc_id=$(echo -e "$awsResponse" | \
+# getting vpcId
+vpcId=$(echo -e "$awsResponse" | \
         /usr/bin/jq '.Vpc.VpcId' | \
         tr -d '"')
 sleep 2
@@ -24,14 +24,14 @@ sleep 2
 # tagging vpc
 echo "Tagging vpc..."
 aws ec2 create-tags \
-        --resources "$vpc_id" \
+        --resources "$vpcId" \
         --tags Key=Name,Value="$VPC_TAG_NAME" \
         --region "$REGION"
 
-# describe vpc_id
+# describe vpcId
 echo "VPC description:"
-vpc_descrition=$(aws ec2 describe-vpcs \
-                --vpc-ids "$vpc_id" \
+vpcDescription=$(aws ec2 describe-vpcs \
+                --vpc-ids "$vpcId" \
                 --region "$REGION")
 
-echo $vpc_descrition | /usr/bin/jq
+echo $vpcDescription | /usr/bin/jq
